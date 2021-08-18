@@ -13,13 +13,18 @@ var server = http.createServer(function(req, res) {
   const application = req.url.split('/')[1]
   console.log(application);
 
+  const trimUrl = (req, level = 1) => {
+    req.url = '/' + req.url.split('/').slice(1 + level).join('/')
+    return req
+  }
+
   switch (application) {
-    case 'weekly':
-      req.url = '/' + req.url.split('/').slice(2).join('/')
+    case 'weekly-mix':
+      req = trimUrl(req)
       proxy.web(req, res, { target: 'http://rohrandi.com:5678' });
       break;
-    case 'sauger':
-      req.url = '/' + req.url.split('/').slice(2).join('/')
+    case 'yt-sauger':
+      req = trimUrl(req)
       proxy.web(req, res, { target: 'http://rohrandi.com:3001' });
       break
     default:
